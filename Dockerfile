@@ -1,6 +1,7 @@
 FROM python:3.11-slim
+ARG YOLO_VERSION
 ENV PORT 8000
-ENV YOLO_VERSION "yolov8n.pt"
+ENV YOLO_VERSION ${YOLO_VERSION}
 
 RUN apt-get update && apt install wget ffmpeg libsm6 libxext6  -y
 # install cpu version of pytorch

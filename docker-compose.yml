@@ -1,8 +1,9 @@
 version: "3"
 services:
   od-backend:
-    build: .
+    build:
+      context: .
+      args:
+        - YOLO_VERSION=yolov8x.pt
     ports:
       - "8000:8000"
-    environment:
-      - YOLO_VERSION=yolov8x.pt
