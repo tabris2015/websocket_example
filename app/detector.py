@@ -2,22 +2,10 @@ from ultralytics import YOLO
 from pydantic import BaseModel
 from enum import Enum
 from app.config import get_settings
+from app.models import Detection, PredictionType
 
 SETTINGS = get_settings()
 
-class PredictionType(str, Enum):
-    classification = "CLS"
-    object_detection = "OD"
-    segmentation = "SEG"
-
-class GeneralPrediction(BaseModel):
-    pred_type: PredictionType
-
-class Detection(GeneralPrediction):
-    n_detections: int
-    boxes: list[list[int]]
-    labels: list[str]
-    confidences: list[float]
 
 class ObjectDetector:
     def __init__(self) -> None:
@@ -35,6 +23,3 @@ class ObjectDetector:
             confidences=results.boxes.conf.tolist()
         )
         return detection
-
-    def predict_pil(self, image,  threshold=0.5):
-        img_

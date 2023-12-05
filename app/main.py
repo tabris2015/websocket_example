@@ -1,44 +1,38 @@
 import asyncio
-import contextlib
-import io
 
-import numpy as np
 from app.detector import ObjectDetector
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends, UploadFile, File
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from PIL import Image
-from pydantic import BaseModel
 
+from app.models import Detection
+from app.utils import receive, detect, predict_uploadfile
 
 app = FastAPI()
-detector = ObjectDetector()
 
 
-async def receive(websocket: WebSocket, queue: asyncio.Queue):
-    while True:
-        bytes = await websocket.receive_bytes()
-        try:
-            queue.put_nowait(bytes)
-        except asyncio.QueueFull:
-            pass
+def get_detector():
+    return ObjectDetector()
 
 
-async def detect(websocket: WebSocket, queue: asyncio.Queue):
-    while True:
-        bytes = await queue.get()
-        image = Image.open(io.BytesIO(bytes))
-        objects = detector.predict_image(np.array(image), 0.2)
-        await websocket.send_json(objects.dict())
+@app.post("/objects")
+def detect_objects(
+        threshold: float = 0.5,
+        file: UploadFile = File(...),
+        predictor: ObjectDetector = Depends(get_detector)
+) -> Detection:
+    results, _ = predict_uploadfile(predictor, file, threshold)
+
+    return results
 
 
 @app.websocket("/object-detection")
-async def ws_object_detection(websocket: WebSocket):
+async def ws_object_detection(websocket: WebSocket, detector: ObjectDetector = Depends(get_detector)):
     await websocket.accept()
 
     queue = asyncio.Queue(maxsize=1)
     receive_task = asyncio.create_task(receive(websocket, queue))
-    detect_task = asyncio.create_task(detect(websocket, queue))
+    detect_task = asyncio.create_task(detect(detector, websocket, queue))
 
     try:
         done, pending = await asyncio.wait(
