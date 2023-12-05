@@ -4,3 +4,5 @@ services:
     build: .
     ports:
       - "8000:8000"
+    environment:
+      - YOLO_VERSION=yolov8x.pt

@@ -28,12 +28,12 @@ async def detect(detector: ObjectDetector, websocket: WebSocket, queue: asyncio.
 
 
 def predict_uploadfile(predictor, file, threshold):
-    img_stream = io.BytesIO(file.file.read())
     if file.content_type.split("/")[0] != "image":
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             detail="Not an image"
         )
+    img_stream = io.BytesIO(file.file.read())
     # convertir a una imagen de Pillow
     img_obj = Image.open(img_stream)
     # crear array de numpy

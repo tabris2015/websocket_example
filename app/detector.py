@@ -1,6 +1,4 @@
 from ultralytics import YOLO
-from pydantic import BaseModel
-from enum import Enum
 from app.config import get_settings
 from app.models import Detection, PredictionType
 

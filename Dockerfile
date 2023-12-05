@@ -1,5 +1,6 @@
 FROM python:3.11-slim
 ENV PORT 8000
+ENV YOLO_VERSION "yolov8n.pt"
 
 RUN apt-get update && apt install wget ffmpeg libsm6 libxext6  -y
 # install cpu version of pytorch
@@ -7,7 +8,7 @@ RUN pip install torch torchvision torchaudio --index-url https://download.pytorc
 
 COPY requirements.txt /
 RUN pip install -r requirements.txt
-RUN wget https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt
+RUN wget https://github.com/ultralytics/assets/releases/download/v0.0.0/${YOLO_VERSION}
 
 COPY ./app /app
 COPY ./assets /assets
