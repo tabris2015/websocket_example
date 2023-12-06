@@ -1,6 +1,6 @@
 import asyncio
 
-from app.detector import ObjectDetector
+from app.detector import ObjectDetector, YOLOObjectDetector, MediapipeObjectDetector
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends, UploadFile, File
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,7 +12,7 @@ app = FastAPI()
 
 
 def get_detector():
-    return ObjectDetector()
+    return MediapipeObjectDetector()
 
 
 @app.post("/objects")

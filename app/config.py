@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     api_name: str = "Object Detection service"
     revision: str = "local"
     yolo_version: str = "yolov8n.pt"
+    mediapipe_det_model: str = "efficientdet.tflite"
     log_level: str = "DEBUG"
 
 
