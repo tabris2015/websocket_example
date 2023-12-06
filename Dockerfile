@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 ENV PORT 8000
 
-RUN apt-get update && apt install wget ffmpeg libsm6 libxext6  -y
+RUN apt-get update && apt install wget ffmpeg libsm6 libxext6 gcc python3-dev -y
 # install cpu version of pytorch
 RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
