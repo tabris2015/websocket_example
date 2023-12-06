@@ -52,8 +52,10 @@ class MediapipeObjectDetector:
 
     def predict_image(self, img_array: np.ndarray, threshold: float):
         # convert image for tflite model
+        start_time = time.time()
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=img_array)
         result = self.detector.detect(mp_image)
+        print(f"inference time: {time.time() - start_time}")
         boxes = []
         labels = []
         confidences = []
