@@ -4,6 +4,6 @@ services:
     build:
       context: .
       args:
-        - YOLO_VERSION=yolov8l.pt
+        - YOLO_VERSION=yolov8n.pt
     ports:
       - "8000:8000"
