@@ -16,6 +16,6 @@ ARG YOLO_VERSION
 ENV YOLO_VERSION ${YOLO_VERSION}
 RUN wget https://github.com/ultralytics/assets/releases/download/v0.0.0/${YOLO_VERSION}
 
-RUN wget -q -O efficientdet.tflite -q https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/1/efficientdet_lite0.tflite
+RUN wget -O efficientdet.tflite https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/1/efficientdet_lite0.tflite
 
 CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
