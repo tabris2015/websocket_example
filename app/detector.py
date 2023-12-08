@@ -13,7 +13,7 @@ import cv2
 SETTINGS = get_settings()
 
 class ObjectDetector(Protocol):
-    def predict_image(self, image_array: np.ndarray, threshold: float):
+    def predict_image(self, image_array: np.ndarray, threshold: float) -> Detection:
         pass
 
 
@@ -21,7 +21,7 @@ class YOLOObjectDetector:
     def __init__(self) -> None:
         self.model = YOLO(SETTINGS.yolo_version)
 
-    def predict_image(self, image_array: np.ndarray, threshold: float):
+    def predict_image(self, image_array: np.ndarray, threshold: float) -> Detection:
         results = self.model(image_array, conf=threshold)[0]
         labels = [results.names[i] for i in results.boxes.cls.tolist()]
         boxes = [[int(v) for v in box] for box in results.boxes.xyxy.tolist()]
@@ -45,12 +45,8 @@ class MediapipeObjectDetector:
             score_threshold=0.5,
         )
         self.detector = vision.ObjectDetector.create_from_options(options)
-        self.detection_result_list = []
 
-    def save_result(self, result: vision.ObjectDetectorResult, unused_output_image: mp.Image, timestamp_ms: int):
-        self.detection_result_list.append(result)
-
-    def predict_image(self, img_array: np.ndarray, threshold: float):
+    def predict_image(self, img_array: np.ndarray, threshold: float) -> Detection:
         # convert image for tflite model
         start_time = time.time()
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=img_array)

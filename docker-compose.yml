@@ -3,7 +3,8 @@ services:
   od-backend:
     build:
       context: .
+      dockerfile: Dockerfile_gpu
       args:
-        - YOLO_VERSION=yolov8n.pt
+        - YOLO_VERSION=yolov8x.pt
     ports:
       - "8000:8000"

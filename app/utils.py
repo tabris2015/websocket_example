@@ -8,6 +8,7 @@ from fastapi import HTTPException, status
 from starlette.websockets import WebSocket
 
 from app.detector import ObjectDetector
+from app.models import Detection
 
 
 async def receive(websocket: WebSocket, queue: asyncio.Queue):
@@ -27,7 +28,7 @@ async def detect(detector: ObjectDetector, websocket: WebSocket, queue: asyncio.
         await websocket.send_json(objects.dict())
 
 
-def predict_uploadfile(predictor, file, threshold):
+def predict_uploadfile(predictor, file, threshold) -> tuple[Detection, np.ndarray]:
     if file.content_type.split("/")[0] != "image":
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,

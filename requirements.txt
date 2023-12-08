@@ -5,3 +5,4 @@ ultralytics
 python-dotenv
 python-multipart
 mediapipe
+sqlmodel
