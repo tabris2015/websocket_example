@@ -7,7 +7,7 @@ from fastapi import APIRouter, UploadFile, File, Depends, WebSocket, WebSocketDi
 from sqlmodel import Session, select
 
 from app.db import get_session
-from app.detector import ObjectDetector, MediapipeObjectDetector
+from app.detector import ObjectDetector, MediapipeObjectDetector, YOLOObjectDetector
 from app.models import Detection, DetectionEvent
 from app.utils import predict_uploadfile, receive, detect
 
@@ -15,7 +15,7 @@ router = APIRouter()
 
 
 def get_detector():
-    return MediapipeObjectDetector()
+    return YOLOObjectDetector()
 
 
 @router.post("/objects")
